@@ -1,17 +1,31 @@
 package com.samdide.android.androidbilling;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    private Button clickButton;
+    private Button buyButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        buyButton = (Button) findViewById(R.id.buyButton);
+        clickButton = (Button) findViewById(R.id.clickButton);
+        clickButton.setEnabled(false);
     }
 
 
@@ -35,5 +49,10 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void clickButtonClicked(View view) {
+        clickButton.setEnabled(false);
+        buyButton.setEnabled(true);
     }
 }
