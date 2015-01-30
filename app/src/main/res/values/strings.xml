@@ -2,7 +2,8 @@
 <resources>
 
     <string name="app_name">Android Billing</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="click_me">Click Me!</string>
+    <string name="buy_a_click">Buy a Click</string>
     <string name="action_settings">Settings</string>
 
 </resources>
