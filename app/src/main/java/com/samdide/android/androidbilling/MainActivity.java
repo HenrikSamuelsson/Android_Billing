@@ -2,13 +2,19 @@ package com.samdide.android.androidbilling;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.samdide.android.inappbilling.util.IabHelper;
+import com.samdide.android.inappbilling.util.IabResult;
+
 
 public class MainActivity extends ActionBarActivity {
+    private static final String TAG = "com.samdide.android.androidbilling";
+    IabHelper mHelper;
 
     private Button clickButton;
     private Button buyButton;
@@ -26,6 +32,20 @@ public class MainActivity extends ActionBarActivity {
         buyButton = (Button) findViewById(R.id.buyButton);
         clickButton = (Button) findViewById(R.id.clickButton);
         clickButton.setEnabled(false);
+
+        String base64EncodedPublicKey = getString(R.string.RSA_public_key);
+
+        mHelper = new IabHelper(this, base64EncodedPublicKey);
+
+        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            public void onIabSetupFinished(IabResult result) {
+                if (!result.isSuccess()) {
+                    Log.d(TAG, "In-app Billing setup failed: " + result);
+                } else {
+                    Log.d(TAG, "In-app Billing setup success.");
+                }
+            }
+        });
     }
 
 
