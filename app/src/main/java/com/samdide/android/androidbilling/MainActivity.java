@@ -15,6 +15,7 @@ import com.samdide.android.inappbilling.util.IabResult;
 public class MainActivity extends ActionBarActivity {
     private static final String TAG = "com.samdide.android.androidbilling";
     IabHelper mHelper;
+    static final String ITEM_SKU = "android.test.purchased";
 
     private Button clickButton;
     private Button buyButton;
@@ -74,5 +75,10 @@ public class MainActivity extends ActionBarActivity {
     public void clickButtonClicked(View view) {
         clickButton.setEnabled(false);
         buyButton.setEnabled(true);
+    }
+
+    public void buyButtonClicked(View view) {
+        mHelper.launchPurchaseFlow(this, ITEM_SKU, 10001, mPurchaseFinishedListener,
+                "mypurchasetoken");
     }
 }
