@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import com.samdide.android.inappbilling.util.IabHelper;
 import com.samdide.android.inappbilling.util.IabResult;
+import com.samdide.android.inappbilling.util.Purchase;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -77,6 +78,19 @@ public class MainActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
             super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener
+            = new IabHelper.OnIabPurchaseFinishedListener() {
+        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+            if (result.isFailure()) {
+                // Handle error
+                return;
+            } else if (purchase.getSku().equals(ITEM_SKU)) {
+                consumeItem();
+                buyButton.setEnabled(false);
+            }
         }
     }
 
