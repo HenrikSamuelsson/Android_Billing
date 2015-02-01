@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import com.samdide.android.inappbilling.util.IabHelper;
 import com.samdide.android.inappbilling.util.IabResult;
+import com.samdide.android.inappbilling.util.Inventory;
 import com.samdide.android.inappbilling.util.Purchase;
 
 
@@ -51,6 +52,12 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mHelper != null) mHelper.dispose();
+        mHelper = null;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -85,14 +92,14 @@ public class MainActivity extends ActionBarActivity {
             = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
             if (result.isFailure()) {
-                // Handle error
+                // Error handling here
                 return;
             } else if (purchase.getSku().equals(ITEM_SKU)) {
                 consumeItem();
                 buyButton.setEnabled(false);
             }
         }
-    }
+    };
 
     public void clickButtonClicked(View view) {
         clickButton.setEnabled(false);
@@ -103,4 +110,35 @@ public class MainActivity extends ActionBarActivity {
         mHelper.launchPurchaseFlow(this, ITEM_SKU, 10001, mPurchaseFinishedListener,
                 "mypurchasetoken");
     }
+
+    public void consumeItem() {
+        mHelper.queryInventoryAsync(mReceivedInventoryListener);
+    }
+
+    IabHelper.QueryInventoryFinishedListener mReceivedInventoryListener
+            = new IabHelper.QueryInventoryFinishedListener() {
+        public void onQueryInventoryFinished(IabResult result,
+                                             Inventory inventory) {
+
+            if (result.isFailure()) {
+                // Handle failure
+            } else {
+                mHelper.consumeAsync(inventory.getPurchase(ITEM_SKU),
+                        mConsumeFinishedListener);
+            }
+        }
+    };
+
+    IabHelper.OnConsumeFinishedListener mConsumeFinishedListener =
+            new IabHelper.OnConsumeFinishedListener() {
+                public void onConsumeFinished(Purchase purchase,
+                                              IabResult result) {
+
+                    if (result.isSuccess()) {
+                        clickButton.setEnabled(true);
+                    } else {
+                        // handle error
+                    }
+                }
+            };
 }
