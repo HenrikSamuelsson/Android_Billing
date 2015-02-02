@@ -18,7 +18,7 @@ import com.samdide.android.inappbilling.util.Purchase;
 public class MainActivity extends ActionBarActivity {
     private static final String TAG = "com.samdide.android.androidbilling";
     IabHelper mHelper;
-    static final String ITEM_SKU = "android.test.purchased";
+    static final String ITEM_SKU = "com.example.buttonclick";
 
     private Button clickButton;
     private Button buyButton;
